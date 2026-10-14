@@ -1,0 +1,9 @@
+{
+  "name": "bestcement-site",
+  "private": true,
+  "description": "Best Cement CIRP information site (static, served by nginx in production)",
+  "scripts": {
+    "start": "npx --yes serve site -l 8000",
+    "check": "python3 scripts/check_site.py"
+  }
+}
