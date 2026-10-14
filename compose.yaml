@@ -1,0 +1,12 @@
+services:
+  site:
+    image: nginx:stable-alpine
+    container_name: bestcement-preview
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8090:80"
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    security_opt:
+      - no-new-privileges:true
