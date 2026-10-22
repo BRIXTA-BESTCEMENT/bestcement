@@ -26,6 +26,6 @@ assert len(parser.ids) >= 3, "Expected semantic page sections"
 for href in parser.links:
     if href.startswith("#") and href != "#":
         assert href[1:] in parser.ids, f"Broken anchor: {href}"
-for file in ("styles.css", "app.js"):
+for file in ("styles.css", "best-cement-logo.png", "documents/nclt-order-cp-ib-40-gb-2026.pdf"):
     assert (SITE / file).is_file(), f"Missing asset: {file}"
 print("Site validation passed.")
