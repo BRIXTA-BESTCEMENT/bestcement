@@ -4,8 +4,10 @@
    sits on the page, as fractions of the page width/height: [left, top, right, bottom]. */
 
 const EDITIONS = [
+  { slug: "assam-rising", paper: "The Assam Rising", city: "Assam", lang: "English", page: 3, box: [0.7015, 0.5394, 0.8925, 0.7695] },
+  { slug: "dainandin-barta", paper: "Dainandin Barta", city: "Assam", lang: "Assamese", page: 3, box: [0.7035, 0.7156, 0.8945, 0.9461] },
   { slug: "hills-times", paper: "The Hills Times", city: "Guwahati", lang: "English", page: 7, box: [0.7017, 0.7159, 0.9293, 0.9657] },
-  { slug: "rupang", paper: "Rupang", city: "Shillong", lang: "Khasi", page: 6, box: [0.7277, 0.7037, 0.9661, 0.9948] },
+  { slug: "rupang", paper: "Rupang", city: "Meghalaya", lang: "Khasi", page: 6, box: [0.7277, 0.7037, 0.9661, 0.9948] },
   { slug: "fe-kolkata", paper: "Financial Express", city: "Kolkata", lang: "English", page: 5, box: [0.7402, 0.4663, 1.0, 0.7182] },
   { slug: "fe-delhi", paper: "Financial Express", city: "Delhi", lang: "English", page: 5, box: [0.7389, 0.4663, 0.9955, 0.7204] },
   { slug: "fe-chandigarh", paper: "Financial Express", city: "Chandigarh", lang: "English", page: 5, box: [0.7389, 0.4665, 0.9955, 0.7198] },
@@ -34,30 +36,31 @@ function countdown() {
   } else el.textContent = days <= 1 ? "Last day today" : `${days} days left`;
 }
 
-/* ---------- the newspaper stand ---------- */
+/* ---------- publication record: one card per newspaper, full front of the page ---------- */
 function buildStand() {
-  const rail = $("#stand");
-  if (!rail) return;
-  rail.innerHTML = EDITIONS.map(
+  const grid = $("#stand");
+  if (!grid) return;
+  grid.innerHTML = EDITIONS.map(
     (e, i) => `
-    <button type="button" class="paper" data-i="${i}" style="--tilt:${((i % 5) - 2) * 0.7}deg" aria-label="Read the notice in ${esc(e.paper)}, ${esc(e.city)} edition">
-      <span class="paper__mast">${esc(e.paper)}</span>
-      <span class="paper__line"><span>${esc(e.city)} edition</span><span>Page ${e.page}</span></span>
-      <span class="paper__clip"><img src="${DIR}${e.slug}-clip.webp" alt="" decoding="async"></span>
-      <span class="paper__foot"><span class="paper__lang">${esc(e.lang)}</span><span class="paper__read">Read &rarr;</span></span>
+    <button type="button" class="pub" data-i="${i}" aria-label="View ${esc(e.paper)}, ${esc(e.city)} edition, page ${e.page}">
+      <span class="pub__page"><img src="${DIR}${e.slug}-thumb.webp" alt="" loading="lazy" decoding="async"></span>
+      <span class="pub__name">${esc(e.paper)}</span>
+      <span class="pub__meta">${esc(e.city)} &middot; ${esc(e.lang)}</span>
+      <span class="pub__meta">14 Oct 2026 &middot; Page ${e.page}</span>
+      <span class="pub__view">View page</span>
     </button>`
   ).join("");
-  rail.addEventListener("click", (ev) => {
-    const b = ev.target.closest(".paper");
-    if (b) open(+b.dataset.i, "notice", b);
+  grid.addEventListener("click", (ev) => {
+    const b = ev.target.closest(".pub");
+    if (b) open(+b.dataset.i, "page", b);
   });
 }
 
 /* ---------- reader ---------- */
-const R = { i: 0, mode: "notice", z: 1, x: 0, y: 0, opener: null };
+const R = { i: 0, mode: "page", z: 1, x: 0, y: 0, opener: null };
 let reader, desk, sheet, img, mark, crisp;
 
-function open(i, mode = "notice", opener = null) {
+function open(i, mode = "page", opener = null) {
   R.opener = opener;
   reader.hidden = false;
   document.documentElement.classList.add("rd-open");
@@ -81,14 +84,14 @@ function show(i, mode = R.mode) {
   reader.querySelectorAll(".rd-strip button").forEach((b, k) => b.setAttribute("aria-selected", String(k === R.i)));
   reader.querySelector(".rd-strip [aria-selected=true]")?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
   reader.dataset.mode = mode;
-  img.alt = mode === "notice" ? `Form A public announcement as printed in ${e.paper}, ${e.city}` : `${e.paper}, ${e.city} edition, page ${e.page}`;
+  img.alt = `${e.paper}, ${e.city} edition, page ${e.page}, carrying the Form A public announcement`;
   sheet.classList.add("is-loading");
   img.onload = () => {
     sheet.classList.remove("is-loading");
     fit();
-    if (mode === "page") setTimeout(() => focusNotice(true), 450);
+    mark.classList.remove("is-on");
   };
-  img.src = DIR + e.slug + (mode === "notice" ? "-notice.webp" : "-page.webp");
+  img.src = DIR + e.slug + "-page.webp";
   const [l, t, r, b] = e.box;
   const pos = { left: l * 100 + "%", top: t * 100 + "%", width: (r - l) * 100 + "%", height: (b - t) * 100 + "%" };
   Object.assign(mark.style, pos);
@@ -138,7 +141,7 @@ function zoomAt(nz, cx, cy, anim = true) {
 
 /* full page: glide to the Form A box */
 function focusNotice(anim = true) {
-  if (R.mode !== "page") return show(R.i, "notice");
+  mark.classList.add("is-on");
   const [l, t, r, b] = EDITIONS[R.i].box;
   const sw = sheet.offsetWidth, sh = sheet.offsetHeight;
   const z = Math.min(desk.clientWidth / ((r - l) * sw * 1.12), (desk.clientHeight - 90) / ((b - t) * sh * 1.12), 6);
@@ -146,7 +149,7 @@ function focusNotice(anim = true) {
   R.x = -(((l + r) / 2 - 0.5) * sw) * R.z;
   R.y = -(((t + b) / 2 - 0.5) * sh) * R.z + 18; // a little room above for the "Form A" tag
   apply(anim);
-  mark.classList.remove("is-pulse"); void mark.offsetWidth; mark.classList.add("is-pulse");
+
 }
 
 function wire() {
@@ -154,10 +157,9 @@ function wire() {
   if (!reader) return;
 
   $("#rd-strip").innerHTML = EDITIONS.map(
-    (e, i) => `<button type="button" role="tab" data-i="${i}"><img src="${DIR}${e.slug}-thumb.webp" alt="" loading="lazy"><span>${esc(e.paper === "Financial Express" ? "FE " + e.city : e.paper)}</span></button>`
+    (e, i) => `<button type="button" role="tab" data-i="${i}"><img src="${DIR}${e.slug}-thumb.webp" alt="" loading="lazy"><span>${esc(e.paper === "Financial Express" ? "FE " + e.city : e.paper.replace(/^The /, ""))}</span></button>`
   ).join("");
   $("#rd-strip").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) show(+b.dataset.i); });
-  reader.querySelectorAll("[data-mode]").forEach((b) => b.addEventListener("click", () => show(R.i, b.dataset.mode)));
   reader.querySelectorAll("[data-zoom]").forEach((b) =>
     b.addEventListener("click", () => { const r = desk.getBoundingClientRect(); zoomAt(R.z * (b.dataset.zoom > 0 ? 1.5 : 1 / 1.5), r.width / 2, r.height / 2); })
   );

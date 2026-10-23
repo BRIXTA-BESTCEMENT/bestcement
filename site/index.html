@@ -9,9 +9,9 @@
 <link rel="icon" type="image/png" href="/best-cement-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500&family=Public+Sans:wght@400;500;600&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=202610231900">
-<script src="/reader.js?v=202610231900" type="module"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500&family=Public+Sans:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=202610231930">
+<script src="/reader.js?v=202610231930" type="module"></script>
 </head>
 <body>
 
@@ -46,7 +46,7 @@
     <div class="pa-head">
       <p class="eyebrow">Public announcement &middot; Form A</p>
       <h2 id="pa-title">Creditors of J.U.D. Cements Limited are called upon to submit their claims</h2>
-      <p class="pa-sub">Published on <strong>14 October 2026</strong> in ten newspaper editions under Regulation 6 of the IBBI (Insolvency Resolution Process for Corporate Persons) Regulations, 2016.</p>
+      <p class="pa-sub">Published on <strong>14 October 2026</strong> in twelve newspaper editions under Regulation 6 of the IBBI (Insolvency Resolution Process for Corporate Persons) Regulations, 2016.</p>
     </div>
 
     <div class="pa-facts">
@@ -67,9 +67,11 @@
       </div>
     </div>
 
-    <div class="stand" aria-label="Newspapers that carried the announcement">
-      <div class="stand-rail" id="stand"></div>
+    <div class="pubs-head">
+      <h3>Publication record</h3>
+      <p>The announcement as printed on 14 October 2026. Select a newspaper to view the full page.</p>
     </div>
+    <div class="pubs" id="stand" aria-label="Newspapers that carried the announcement"></div>
 
     <details class="pa-text">
       <summary>Read the announcement as text</summary>
@@ -118,13 +120,10 @@
       <span class="rd-name" id="rd-title"></span>
       <span class="rd-meta" id="rd-meta"></span>
     </div>
-    <div class="rd-modes" role="tablist" aria-label="View">
-      <button type="button" role="tab" data-mode="notice" aria-selected="true">The notice</button>
-      <button type="button" role="tab" data-mode="page" aria-selected="false">Full page</button>
-    </div>
     <div class="rd-tools">
       <button type="button" class="rd-ic" data-zoom="-1" aria-label="Zoom out">&minus;</button>
       <button type="button" class="rd-ic" data-zoom="1" aria-label="Zoom in">+</button>
+      <button type="button" class="rd-ic rd-locate" id="rd-jump">Locate notice</button>
       <a class="rd-ic rd-pdf" id="rd-pdf" href="#" target="_blank" rel="noopener" aria-label="Open the original PDF">PDF</a>
       <button type="button" class="rd-ic rd-x" id="rd-close" aria-label="Close">&times;</button>
     </div>
@@ -133,12 +132,11 @@
     <div class="rd-sheet" id="rd-sheet">
       <img id="rd-img" alt="" draggable="false">
       <img class="rd-crisp" id="rd-crisp" alt="" draggable="false">
-      <span class="rd-mark" id="rd-mark" aria-hidden="true"><b>Form A</b></span>
+      <span class="rd-mark" id="rd-mark" aria-hidden="true"></span>
     </div>
     <button type="button" class="rd-nav rd-nav--prev" id="rd-prev" aria-label="Previous newspaper">&lsaquo;</button>
     <button type="button" class="rd-nav rd-nav--next" id="rd-next" aria-label="Next newspaper">&rsaquo;</button>
-    <button type="button" class="rd-jump" id="rd-jump">Go to the notice &darr;</button>
-    <p class="rd-hint" id="rd-hint">Drag to move &middot; pinch, scroll or +/&minus; to zoom &middot; double-tap to zoom in</p>
+    <p class="rd-hint" id="rd-hint">Pinch, scroll or use + / &minus; to zoom &middot; drag to move</p>
   </div>
   <div class="rd-strip" id="rd-strip" role="tablist" aria-label="Editions"></div>
 </div>

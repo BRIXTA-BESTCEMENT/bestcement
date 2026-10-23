@@ -30,7 +30,7 @@ for file in ("styles.css", "reader.js", "best-cement-logo.png", "documents/nclt-
     assert (SITE / file).is_file(), f"Missing asset: {file}"
 import re
 for slug in re.findall(r'slug: "([a-z0-9-]+)"', (SITE / "reader.js").read_text()):
-    for suffix in (".pdf", "-page.webp", "-thumb.webp", "-notice.webp", "-clip.webp"):
+    for suffix in (".pdf", "-page.webp", "-thumb.webp", "-notice.webp"):
         assert (SITE / "newspapers" / (slug + suffix)).is_file(), f"Missing newspaper file: {slug}{suffix}"
 for file in ():
     assert (SITE / file).is_file(), f"Missing asset: {file}"
