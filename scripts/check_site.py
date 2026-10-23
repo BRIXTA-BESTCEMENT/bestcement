@@ -26,6 +26,12 @@ assert len(parser.ids) >= 3, "Expected semantic page sections"
 for href in parser.links:
     if href.startswith("#") and href != "#":
         assert href[1:] in parser.ids, f"Broken anchor: {href}"
-for file in ("styles.css", "best-cement-logo.png", "documents/nclt-order-cp-ib-40-gb-2026.pdf"):
+for file in ("styles.css", "reader.js", "best-cement-logo.png", "documents/nclt-order-cp-ib-40-gb-2026.pdf"):
+    assert (SITE / file).is_file(), f"Missing asset: {file}"
+import re
+for slug in re.findall(r'slug: "([a-z0-9-]+)"', (SITE / "reader.js").read_text()):
+    for suffix in (".pdf", "-page.webp", "-thumb.webp", "-notice.webp", "-clip.webp"):
+        assert (SITE / "newspapers" / (slug + suffix)).is_file(), f"Missing newspaper file: {slug}{suffix}"
+for file in ():
     assert (SITE / file).is_file(), f"Missing asset: {file}"
 print("Site validation passed.")
